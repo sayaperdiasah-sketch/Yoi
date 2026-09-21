@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuratApp - Sistem Manajemen Surat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGASI (Satu Dashboard, Dua Kategori) -->
+    <nav class="sidebar no-print">
+        <div class="logo">SuratApp</div>
+        
+        <div class="nav-group">
+            <h3>Buat Surat</h3>
+            <button class="nav-btn active" onclick="switchPage('pembuat')">1. Data Pembuat</button>
+            <button class="nav-btn" id="btn-nav-jenis" onclick="switchPage('jenis')" disabled>2. Jenis Surat</button>
+            <button class="nav-btn" id="btn-nav-penandatangan" onclick="switchPage('penandatangan')" disabled>3. Penandatangan</button>
+            <button class="nav-btn" id="btn-nav-form" onclick="switchPage('form')" disabled>4. Isi Biodata</button>
+            <button class="nav-btn" onclick="switchPage('arsip')">Riwayat Arsip</button>
+        </div>
+
+        <div class="nav-group">
+            <h3>Edit Isi Surat</h3>
+            <button class="nav-btn" onclick="switchPage('template')">Kelola Template</button>
+        </div>
+    </nav>
+
+    <!-- KONTEN UTAMA -->
+    <main class="content-wrapper">
+        
+        <!-- LANGKAH 1: DATA PEMBUAT -->
+        <section id="page-pembuat" class="page-section active no-print">
+            <h2>Langkah 1: Identitas Pembuat Surat</h2>
+            <div class="card">
+                <form id="form-pembuat" onsubmit="savePembuat(event)">
+                    <div class="form-group">
+                        <label>Nama Pembuat (Staf)</label>
+                        <input type="text" id="pembuat-nama" required placeholder="Contoh: Andi Wijaya">
+                    </div>
+                    <div class="form-group">
+                        <label>Jabatan Staf</label>
+                        <input type="text" id="pembuat-jabatan" required placeholder="Contoh: Staf Administrasi Umum">
+                    </div>
+                    <button type="submit" class="btn-primary">Lanjutkan & Pilih Jenis Surat</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- LANGKAH 2: PILIH JENIS SURAT -->
+        <section id="page-jenis" class="page-section no-print">
+            <h2>Langkah 2: Pilih Jenis / Template Surat</h2>
+            <div id="template-grid" class="grid-container">
+                <!-- Diisi via JS -->
+            </div>
+        </section>
+
+        <!-- LANGKAH 3: PILIH PENANDATANGAN -->
+        <section id="page-penandatangan" class="page-section no-print">
+            <h2>Langkah 3: Tentukan Penandatangan Surat</h2>
+            <div class="card">
+                <div class="form-group">
+                    <label>Metode Penandatangan</label>
+                    <select id="signer-mode" onchange="toggleSignerMode()">
+                        <option value="selected">Pilih dari Daftar Pejabat</option>
+                        <option value="manual">Input Manual (An. / Plt.)</option>
+                    </select>
+                </div>
+
+                <!-- Mode Pilihan -->
+                <div id="signer-select-container" class="grid-container toggle-mode">
+                    <!-- Diisi via JS (Daftar Dirut/Pejabat) -->
+                </div>
+
+                <!-- Mode Manual -->
+                <div id="signer-manual-container" class="toggle-mode hidden">
+                    <div class="form-group"><label>Jabatan Penandatangan</label><input type="text" id="manual-jabatan" placeholder="Contoh: An. Direktur Utama / Kepala Bagian"></div>
+                    <div class="form-group"><label>Nama Pejabat</label><input type="text" id="manual-nama" placeholder="Contoh: Budi Santoso, M.Si."></div>
+                    <div class="form-group"><label>NIP</label><input type="text" id="manual-nip" placeholder="Contoh: 198501012010011002"></div>
+                </div>
+
+                <button onclick="savePenandatangan()" class="btn-primary mt-20">Lanjutkan ke Pengisian Biodata</button>
+            </div>
+        </section>
+
+        <!-- LANGKAH 4: ISI BIODATA FIELD -->
+        <section id="page-form" class="page-section no-print">
+            <h2 id="form-surat-title">Langkah 4: Lengkapi Data Surat</h2>
+            <div class="card">
+                <div class="form-group">
+                    <label>Nomor Surat Resmi</label>
+                    <input type="text" id="surat-nomor" required placeholder="Contoh: 045.2/ARSIP/2026">
+                </div>
+                <form id="dynamic-form" onsubmit="generateSurat(event)">
+                    <!-- Diisi dinamis oleh JS berdasarkan field template -->
+                </form>
+            </div>
+        </section>
+
+        <!-- HALAMAN PREVIEW & CETAK (Mendukung window.print) -->
+        <section id="page-preview" class="page-section">
+            <div class="preview-actions no-print">
+                <button onclick="switchPage('form')" class="btn-secondary">Kembali</button>
+                <button onclick="finalizeAndPrint()" class="btn-primary">Cetak / Save PDF</button>
+            </div>
+            <!-- Kertas A4 Hasil Render -->
+            <div class="paper-a4" id="surat-render-output">
+                <!-- Hasil gabungan template + data ter-render di sini -->
+            </div>
+        </section>
+
+        <!-- HALAMAN RIWAYAT ARSIP -->
+        <section id="page-arsip" class="page-section no-print">
+            <h2>Riwayat Arsip Surat</h2>
+            <div class="card">
+                <table class="table-full">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tanggal Buat</th>
+                            <th>Nomor Surat</th>
+                            <th>Pembuat (Arsip)</th>
+                            <th>Penandatangan (Snapshot)</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-arsip-body">
+                        <!-- Diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- KATEGORI: DAFTAR TEMPLATE -->
+        <section id="page-template" class="page-section no-print">
+            <div class="header-flex">
+                <h2>Kelola Template Surat</h2>
+                <button onclick="openEditor()" class="btn-primary">+ Tambah Template</button>
+            </div>
+            <div class="card">
+                <table class="table-full">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Nama Jenis Surat</th>
+                            <th>Jumlah Field</th>
+                            <th>Update Terakhir</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-template-body">
+                        <!-- Diisi via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- KATEGORI: VISUAL EDITOR TEMPLATE -->
+        <section id="page-edit" class="page-section no-print">
+            <h2>Editor Visual Template</h2>
+            <div class="editor-layout">
+                <div class="editor-main card">
+                    <div class="form-group">
+                        <label>Key Unik Template</label>
+                        <input type="text" id="edit-key" placeholder="Contoh: konfirmasi_akta">
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Jenis Surat</label>
+                        <input type="text" id="edit-nama" placeholder="Contoh: Surat Keterangan Kerja">
+                    </div>
+                    <div class="form-group">
+                        <label>Isi Template (HTML dengan format {{field}})</label>
+                        <div class="toolbar">
+                            <button onclick="insertPlaceholder()" type="button">+ Sisipkan Data (Placeholder)</button>
+                        </div>
+                        <textarea id="edit-template-body" rows="15" placeholder="Ketik isi surat di sini. Gunakan {{nama_field}} untuk bagian dinamis."></textarea>
+                    </div>
+                    <button onclick="saveTemplateData()" class="btn-primary">Simpan Template</button>
+                    <button onclick="switchPage('template')" class="btn-secondary">Batal</button>
+                </div>
+                
+                <div class="editor-sidebar card">
+                    <h3>Pengaturan Field Data</h3>
+                    <div id="fields-config-list">
+                        <!-- Diisi via JS secara otomatis membaca placeholder -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
