@@ -1,210 +1,185 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuratApp - Pembuat Surat Resmi Instan</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- LAYER PREVIEW & CETAK (MENUTUPI LAYOUT DASHBOARD SAAT AKTIF) -->
-  <div id="view-preview" class="preview-page hidden">
-    <div class="preview-shell">
-      <header class="preview-header">
-        <button onclick="backToForm()" class="btn btn-ghost">← Kembali</button>
-        <div>
-          <div class="preview-eyebrow" style="text-align: center;">Tinjauan Dokumen</div>
-          <h1 class="preview-title" id="preview-surat-title">Surat Resmi</h1>
-        </div>
-        <button onclick="finalizeAndPrint()" class="btn btn-primary">Cetak / Simpan PDF</button>
-      </header>
-      
-      <!-- Kertas A4 Standar Berdasarkan Aturan .paper -->
-      <div class="paper" id="surat-render-output">
-        <!-- Hasil gabungan template + data ter-render di sini via JS -->
-      </div>
-      <div class="archive-note" style="margin-top: 24px;">
-        * Dokumen ini otomatis masuk ke dalam sistem arsip lokal setelah dicetak.
-      </div>
-    </div>
-  </div>
-
-  <!-- LAYOUT UTAMA DASHBOARD (SPLIT LAYOUT) -->
-  <div id="main-dashboard" class="split no-print">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poulls - Eco-Friendly Homes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- SISI KIRI (INFORMASI & NAVIAGASI UTAMA) -->
-    <aside class="split-left">
-      <div>
-        <a href="#" onclick="switchCategory('buat')" class="brand">
-          <div class="brand-mark">S</div> SURATAPP
-        </a>
-        <div class="split-left-content">
-          <h1 id="sidebar-headline">Buat Surat Dinas Kilat</h1>
-          <p class="sub" id="sidebar-subtext">Isi komponen data, pilih pejabat penandatangan, dan hasilkan surat resmi terformat rapi dalam hitungan menit tanpa membuka Microsoft Word.</p>
-        </div>
-      </div>
-
-      <!-- Kategori Navigasi (Satu Dashboard, Dua Kategori) -->
-      <div class="category-nav">
-        <a href="#" id="cat-buat" class="category-link active" onclick="switchCategory('buat')">Buat Surat</a>
-        <a href="#" id="cat-kelola" class="category-link" onclick="switchCategory('kelola')">Kelola Template</a>
-      </div>
-
-      <!-- Testimonial / Quote Card Statis Sesuai CSS -->
-      <div class="quote-card">
-        <div class="q-title">Prinsip Sistem</div>
-        <div class="q-body">"Isi surat adalah hasil render mutlak antara template sistem dan data berkas. Pengguna tidak mengetik isi surat secara bebas untuk menjaga konsistensi format."</div>
-        <div class="q-author">
-          <div class="avatar">SA</div>
-          <strong>Panduan Arsitektur</strong>
-          <div class="stars">★★★★★</div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- SISI KANAN (KONTEN DINAMIS DAN WIZARD STEP) -->
-    <main class="split-right">
-      
-      <!-- PROGRESS DOT BAR (Hanya Tampil Pada Kategori 'Buat Surat') -->
-      <div id="wizard-progress-bar" class="progress">
-        <div class="progress-step active" id="dot-step1"><div class="progress-dot"></div><div class="progress-line"></div></div>
-        <div class="progress-step" id="dot-step2"><div class="progress-dot"></div><div class="progress-line"></div></div>
-        <div class="progress-step" id="dot-step3"><div class="progress-dot"></div><div class="progress-line"></div></div>
-        <div class="progress-step" id="dot-step4"><div class="progress-dot"></div></div>
-      </div>
-
-      <!-- SECTION 1: DATA PEMBUAT (Langkah 1) -->
-      <section id="step-pembuat" class="wizard-section active">
-        <h2 class="form-title">Identitas Staf</h2>
-        <p class="form-sub">Masukkan nama Anda untuk kebutuhan log pencatatan riwayat arsip intern.</p>
-        <form onsubmit="savePembuat(event)" class="form-grid">
-          <div class="field full">
-            <label>Nama Lengkap Pembuat</label>
-            <input type="text" id="pembuat-nama" required placeholder="Contoh: Muhammad Teguh, A.Md.">
-          </div>
-          <div class="field full">
-            <label>Jabatan Administrasi</label>
-            <input type="text" id="pembuat-jabatan" required placeholder="Contoh: Staf Urusan Kepegawaian">
-          </div>
-          <div class="actions full">
-            <div></div>
-            <button type="submit" class="btn btn-primary">Pilih Jenis Surat →</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- SECTION 2: PILIH JENIS SURAT (Langkah 2) -->
-      <section id="step-jenis" class="wizard-section hidden">
-        <h2 class="form-title">Pilih Jenis Surat</h2>
-        <p class="form-sub">Pilih format draf surat dinas resmi yang ingin Anda buat saat ini.</p>
-        <div id="template-options-list" class="template-list">
-          <!-- Diisi via JavaScript -->
-        </div>
-        <div class="actions">
-          <button onclick="goToStep(1)" class="btn btn-ghost">← Kembali</button>
-          <button onclick="validateAndGoToStep3()" class="btn btn-primary">Atur Penandatangan →</button>
-        </div>
-      </section>
-
-      <!-- SECTION 3: PILIH PENANDATANGAN (Langkah 3) -->
-      <section id="step-penandatangan" class="wizard-section hidden">
-        <h2 class="form-title">Penandatangan</h2>
-        <p class="form-sub">Pilih pejabat berwenang atau masukkan identitas penandatangan secara manual.</p>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #FDFBF7; color: #333; }
         
-        <div class="signer-mode-list">
-          <label class="signer-mode-option">
-            <input type="radio" name="smode" value="selected" checked onchange="toggleSignerMode('selected')">
-            <div class="signer-mode-card">
-              <strong>Daftar Pejabat</strong>
-              <small>Pilih direksi utama yang telah terdaftar di sistem.</small>
-            </div>
-          </label>
-          <label class="signer-mode-option">
-            <input type="radio" name="smode" value="manual" onchange="toggleSignerMode('manual')">
-            <div class="signer-mode-card">
-              <strong>Input Manual</strong>
-              <small>Gunakan opsi Atas Nama (An.) atau Pelaksana Tugas (Plt.)</small>
-            </div>
-          </label>
-        </div>
+        /* Custom Colors based on the mockup */
+        .bg-forest { background-color: #2E5A27; }
+        .text-forest { color: #2E5A27; }
+        .bg-light-green { background-color: #E8F0E4; }
+        .bg-cream { background-color: #FDFBF7; }
+        
+        /* Hero Background Overlay */
+        .hero-overlay { background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); }
+        
+        /* Search Bar Styling */
+        .search-pill { background-color: #DCE6D5; }
+        
+        /* Smooth Card Hover */
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="antialiased">
 
-        <!-- Wadah Opsi Pejabat Tetap -->
-        <div id="signer-panel-select" class="signer-panel signer-list">
-          <!-- Diisi via JS -->
-        </div>
-
-        <!-- Wadah Input Manual -->
-        <div id="signer-panel-manual" class="signer-panel form-grid hidden" style="margin-top: 20px;">
-          <div class="field full"><label>Jabatan Penandatangan</label><input type="text" id="manual-jabatan" placeholder="Contoh: An. Direktur Utama / Kepala Divisi SDM"></div>
-          <div class="field"><label>Nama Pejabat</label><input type="text" id="manual-nama" placeholder="Contoh: Sukma Wijaya, S.E."></div>
-          <div class="field"><label>NIP</label><input type="text" id="manual-nip" placeholder="Contoh: 198804112012011003"></div>
-        </div>
-
-        <div class="actions">
-          <button onclick="goToStep(2)" class="btn btn-ghost">← Kembali</button>
-          <button onclick="saveSignerSelection()" class="btn btn-primary">Lengkapi Biodata →</button>
-        </div>
-      </section>
-
-      <!-- SECTION 4: INPUT DATA BIODATA FIELD (Langkah 4) -->
-      <section id="step-form" class="wizard-section hidden">
-        <h2 class="form-title">Lengkapi Data</h2>
-        <p class="form-sub">Masukkan rincian informasi isi surat sesuai kolom parameter template.</p>
-        <form id="dynamic-surat-form" onsubmit="processRenderSurat(event)" class="form-grid">
-          <div class="field full">
-            <label>Nomor Surat Resmi</label>
-            <input type="text" id="surat-nomor-id" required placeholder="Contoh: 800/124/KEP/XII/2026">
-          </div>
-          <!-- Kolom parameter dinamis di-generate di sini via JS -->
-          <div id="dynamic-fields-container" class="form-grid full" style="gap: 20px; display: grid;"></div>
-          
-          <div class="actions full">
-            <button type="button" onclick="goToStep(3)" class="btn btn-ghost">← Kembali</button>
-            <button type="submit" class="btn btn-primary">Tinjau Tampilan Surat ()</button>
-          </div>
-        </form>
-      </section>
-
-      <!-- CATEGORI MANAGEMENT: DAFTAR TEMPLATE & RIWAYAT ARSIP -->
-      <section id="step-kelola-dashboard" class="wizard-section hidden">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Konfigurasi Berkas</span>
-            <h2>Daftar Format Template</h2>
-          </div>
-          <button onclick="openTemplateEditor()" class="btn btn-primary">+ Tambah Template</button>
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
+        <div class="text-2xl font-bold text-forest tracking-tight">Poulls</div>
+        
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600">
+            <a href="#" class="hover:text-forest transition">Home</a>
+            <a href="#" class="hover:text-forest transition">Find</a>
+            <a href="#" class="hover:text-forest transition">Real Estate</a>
+            <a href="#" class="hover:text-forest transition">Contact</a>
         </div>
         
-        <div class="template-list" id="table-template-view" style="margin-bottom: 40px;">
-          <!-- Diisi via JS -->
+        <div class="flex items-center space-x-4">
+            <button class="text-gray-600 hover:text-forest transition"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition shadow-lg shadow-green-900/20">Contact</button>
         </div>
+    </nav>
 
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Log Dokumentasi</span>
-            <h2>Riwayat Arsip Surat Masuk</h2>
-          </div>
+    <!-- HERO SECTION -->
+    <section class="relative h-[85vh] flex items-center pt-20">
+        <!-- Background Image (Ganti dengan gambar asli Anda) -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2565&auto=format&fit=crop" alt="Eco Friendly Home" class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-overlay"></div>
         </div>
-        <div class="template-list" id="table-arsip-view">
-          <!-- Diisi via JS -->
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
+            <div class="max-w-2xl text-white">
+                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-1.5 mb-6">
+                    <i class="fa-solid fa-leaf text-green-400"></i>
+                    <span class="text-sm font-medium">Eco-Friendly Living</span>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">Find Eco-Friendly <br> Homes Easily</h1>
+                <p class="text-lg text-gray-200 mb-8 max-w-lg">Temukan hunian impian yang ramah lingkungan dan selaras dengan alam. Kami membantu Anda menemukan rumah yang tepat untuk gaya hidup berkelanjutan.</p>
+                <button class="bg-white text-forest px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition shadow-lg flex items-center gap-2">
+                    Get Started <i class="fa-solid fa-arrow-right text-sm"></i>
+                </button>
+            </div>
         </div>
-      </section>
+    </section>
 
-      <!-- KATEGORI MANAGEMENT: VISUAL EDITOR TEMPLATE -->
-      <section id="step-editor-visual" class="wizard-section hidden editor-width">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Sistem Penyusun Konten</span>
-            <h2 id="editor-action-title">Buat Template Baru</h2>
-          </div>
-          <p>Tulis redaksi surat biasa, klik tombol "Sisipkan Data" untuk membuat isian dinamis secara otomatis.</p>
+    <!-- FLOATING SEARCH BAR -->
+    <div class="relative z-20 max-w-4xl mx-auto px-6 -mt-10">
+        <div class="search-pill rounded-full p-2 flex flex-col md:flex-row items-center shadow-xl shadow-green-900/10 border border-green-200/50">
+            <div class="flex-1 w-full md:w-auto px-6 py-3 border-b md:border-b-0 md:border-r border-green-300/50">
+                <p class="text-xs text-gray-500 font-semibold mb-1">Location</p>
+                <input type="text" placeholder="Enter city or ZIP" class="bg-transparent border-none outline-none w-full text-sm font-medium text-gray-800 placeholder-gray-400">
+            </div>
+            <div class="flex-1 w-full md:w-auto px-6 py-3">
+                <p class="text-xs text-gray-500 font-semibold mb-1">Property Type</p>
+                <input type="text" placeholder="House, Villa, etc." class="bg-transparent border-none outline-none w-full text-sm font-medium text-gray-800 placeholder-gray-400">
+            </div>
+            <div class="flex items-center space-x-2 px-4 py-2">
+                <button class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-forest transition"><i class="fa-solid fa-user"></i></button>
+                <button class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-forest transition"><i class="fa-solid fa-magnifying-glass"></i></button>
+                <button class="bg-forest text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition">Search</button>
+            </div>
         </div>
+    </div>
 
-        <div class="field full" style="margin-bottom: 16px;">
-          <label>Identitas Key Unik Template</label>
-          <input type="text" id="edit-template-key" placeholder="Contoh: surat_tugas_staf (tidak boleh pakai spasi)">
+    <!-- WELCOME SECTION -->
+    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <!-- Left Image -->
+            <div class="lg:w-1/2 relative">
+                <div class="rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2670&auto=format&fit=crop" alt="Wooden House" class="w-full h-[400px] object-cover">
+                </div>
+                <!-- Floating Badge -->
+                <div class="absolute -top-6 -left-6 bg-forest text-white rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-xl border-4 border-cream z-10">
+                    <i class="fa-solid fa-house-chimney text-2xl mb-1"></i>
+                    <span class="text-xs font-bold text-center leading-tight">Find<br>Homes</span>
+                </div>
+                <!-- Decorative Leaf -->
+                <div class="absolute -bottom-6 -right-6 bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-4 border-cream z-10">
+                    <i class="fa-solid fa-leaf text-xl"></i>
+                </div>
+            </div>
+            
+            <!-- Right Content -->
+            <div class="lg:w-1/2 space-y-6">
+                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">Welcome to <span class="text-forest">Poulls?</span></h2>
+                <p class="text-gray-600 leading-relaxed">Kami percaya bahwa rumah bukan sekadar tempat tinggal, melainkan ruang untuk hidup yang lebih baik. Poulls menghubungkan Anda dengan properti ramah lingkungan yang dirancang untuk kenyamanan dan keberlanjutan.</p>
+                <p class="text-gray-600 leading-relaxed">Dari desain arsitektur hijau hingga lokasi yang asri, kami memastikan setiap properti memenuhi standar kualitas dan etika lingkungan.</p>
+                
+                <div class="flex items-center gap-6 pt-4">
+                    <button class="bg-forest text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition shadow-lg shadow-green-900/20 flex items-center gap-2">
+                        <i class="fa-solid fa-play text-xs"></i> Learn More
+                    </button>
+                    <a href="#" class="text-gray-600 font-medium hover:text-forest transition flex items-center gap-2">
+                        View All Properties <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="field full" style="margin-bottom: 20px;">
-          <label>Nama Jenis Surat Resmi</label>
-          <input type="text" id="edit-template-nama" placeholder="Contoh: Surat Perintah Perjalanan Dinas">
+    </section>
+
+    <!-- FEATURES / CARDS SECTION -->
+    <section class="py-24 px-6 md:px-12 bg-light-green">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">10 Eco-Friendly Living Tips?</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Temukan inspirasi dan panduan untuk memulai gaya hidup berkelanjutan di rumah Anda.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2670&auto=format&fit=crop" alt="Eco Home" class="w-full h-56 object-cover">
+                    <div class="p-8 text-center">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Well Eco-Friendly Homes</h3>
+                        <p class="text-gray-500 text-sm mb-6">Rumah yang dirancang dengan material berkelanjutan dan efisiensi energi maksimal.</p>
+                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2675&auto=format&fit=crop" alt="Sustainable Home" class="w-full h-56 object-cover">
+                    <div class="p-8 text-center">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Sustainably Living Homes</h3>
+                        <p class="text-gray-500 text-sm mb-6">Hunian yang mengutamakan daur ulang, penghematan air, dan ruang terbuka hijau.</p>
+                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                    </div>
+                </div>
+                
+                <!-- Card 3 -->
+                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2653&auto=format&fit=crop" alt="Comfortable Home" class="w-full h-56 object-cover">
+                    <div class="p-8 text-center">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Comfortable Living</h3>
+                        <p class="text-gray-500 text-sm mb-6">Kenyamanan modern yang dipadukan dengan ketenangan alam sekitarnya.</p>
+                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination Dots -->
+            <div class="flex justify-center items-center space-x-2 mt-12">
+                <div class="w-3 h-3 rounded-full bg-forest"></div>
+                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
+                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
+                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER SEDERHANA -->
+    <footer class="bg-white py-8 text-center border-t border-gray-100">
+        <p class="text-gray-500 text-sm">&copy; 2024 Poulls Eco-Friendly Homes. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
