@@ -38,7 +38,7 @@
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
         
         /* Glassmorphism Search Bar */
-        .glass-search { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .glass-search { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.6); }
         
         /* Premium Card Hover */
         .property-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -98,27 +98,57 @@
 
     <!-- 2. HERO SECTION -->
     <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Image with Parallax -->
+        <!-- Background Image with Parallax & Overlay -->
         <div class="absolute inset-0 z-0 hero-bg" style="background-image: url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2565&auto=format&fit=crop');">
-            <div class="absolute inset-0 bg-gradient-to-r from-forest/90 via-forest/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-forest/95 via-forest/70 to-transparent"></div>
         </div>
         
         <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full pt-20">
             <div class="max-w-2xl text-white" data-aos="fade-right" data-aos-duration="1200">
+                
+                <!-- Top Badge -->
                 <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2 mb-8">
                     <i class="fa-solid fa-leaf text-terracotta"></i>
-                    <span class="text-sm font-medium tracking-wider uppercase">Eco-Friendly Living</span>
+                    <span class="text-xs font-semibold tracking-widest uppercase text-gray-200">Premium Eco-Living</span>
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1] mb-6">Find Your <br> <span class="text-terracotta">Dream Eco-Home</span></h1>
-                <p class="text-lg text-gray-200 mb-10 max-w-lg leading-relaxed font-light">Temukan hunian mewah yang ramah lingkungan. Kami menghubungkan Anda dengan properti eksklusif yang dirancang untuk keberlanjutan dan kenyamanan maksimal.</p>
-                <div class="flex flex-wrap gap-4">
+
+                <!-- Headline Utama -->
+                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1] mb-6">
+                    Find Your <br> 
+                    <span class="text-terracotta">Dream Eco-Home</span>
+                </h1>
+
+                <!-- Sub-headline -->
+                <p class="text-lg text-gray-300 mb-10 max-w-lg leading-relaxed font-light">
+                    Experience the harmony of modern luxury and sustainable living. Explore our curated collection of eco-friendly properties designed for a healthier, greener future.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-wrap gap-4 mb-12">
                     <button class="btn-shine bg-terracotta text-white px-8 py-4 rounded-full font-semibold hover:bg-opacity-90 transition shadow-xl shadow-terracotta/30 flex items-center gap-3">
                         Explore Properties <i class="fa-solid fa-arrow-right"></i>
                     </button>
                     <button class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition flex items-center gap-3">
-                        <i class="fa-solid fa-play text-terracotta"></i> Watch Video
+                        <i class="fa-solid fa-play text-terracotta"></i> Watch Showreel
                     </button>
                 </div>
+
+                <!-- Trust Indicators (Social Proof) -->
+                <div class="flex items-center gap-6 pt-6 border-t border-white/20">
+                    <div class="flex -space-x-3">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2564&auto=format&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-forest object-cover">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-forest object-cover">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2574&auto=format&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-forest object-cover">
+                        <div class="w-10 h-10 rounded-full border-2 border-forest bg-terracotta flex items-center justify-center text-xs font-bold">500+</div>
+                    </div>
+                    <div>
+                        <div class="flex text-terracotta text-sm mb-1">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-xs text-gray-400">Rated 4.9/5 by 500+ happy homeowners</p>
+                    </div>
+                </div>
+
             </div>
         </div>
         
@@ -129,20 +159,24 @@
     </section>
 
     <!-- 3. FLOATING SEARCH BAR -->
-    <div class="relative z-20 max-w-5xl mx-auto px-6 -mt-16" data-aos="fade-up" data-aos-delay="300">
-        <div class="glass-search rounded-3xl p-4 md:p-6 shadow-2xl shadow-forest/10 flex flex-col md:flex-row items-center gap-4">
+    <div class="relative z-20 max-w-6xl mx-auto px-6 -mt-16" data-aos="fade-up" data-aos-delay="300">
+        <div class="glass-search rounded-3xl p-4 md:p-6 shadow-2xl shadow-forest/20 flex flex-col md:flex-row items-center gap-4 border border-white/50">
+            
+            <!-- Input Lokasi -->
             <div class="flex-1 w-full px-6 py-3 border-b md:border-b-0 md:border-r border-gray-200">
                 <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Location</label>
                 <div class="flex items-center">
                     <i class="fa-solid fa-location-dot text-terracotta mr-3"></i>
-                    <input type="text" placeholder="City, ZIP, or Neighborhood" class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal placeholder-gray-400">
+                    <input type="text" placeholder="City, ZIP, or Neighborhood" class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal placeholder-gray-400 focus:ring-0">
                 </div>
             </div>
+            
+            <!-- Input Tipe Properti -->
             <div class="flex-1 w-full px-6 py-3 border-b md:border-b-0 md:border-r border-gray-200">
                 <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Property Type</label>
                 <div class="flex items-center">
                     <i class="fa-solid fa-house text-terracotta mr-3"></i>
-                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer">
+                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer focus:ring-0">
                         <option>All Types</option>
                         <option>Villa</option>
                         <option>Cabin</option>
@@ -150,11 +184,13 @@
                     </select>
                 </div>
             </div>
+            
+            <!-- Input Harga -->
             <div class="flex-1 w-full px-6 py-3">
                 <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Price Range</label>
                 <div class="flex items-center">
                     <i class="fa-solid fa-tag text-terracotta mr-3"></i>
-                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer">
+                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer focus:ring-0">
                         <option>Any Price</option>
                         <option>$100k - $300k</option>
                         <option>$300k - $500k</option>
@@ -162,6 +198,8 @@
                     </select>
                 </div>
             </div>
+            
+            <!-- Tombol Search -->
             <button class="btn-shine bg-forest text-white w-full md:w-auto px-10 py-4 rounded-2xl font-semibold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
                 <i class="fa-solid fa-magnifying-glass"></i> Search
             </button>
@@ -180,7 +218,7 @@
         </div>
     </section>
 
-    <!-- 5. WELCOME / ABOUT SECTION -->
+    <!-- 5. ABOUT / WELCOME SECTION -->
     <section id="about" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row items-center gap-20">
             <!-- Left Images -->
