@@ -3,183 +3,603 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poulls - Eco-Friendly Homes</title>
+    <title>Poulls - Premium Eco-Friendly Real Estate</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        forest: '#1A3A32',
+                        sage: '#8B9D83',
+                        cream: '#F9F8F6',
+                        terracotta: '#D4A373',
+                        charcoal: '#2D2D2D'
+                    },
+                    fontFamily: {
+                        playfair: ['"Playfair Display"', 'serif'],
+                        inter: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
     
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #FDFBF7; color: #333; }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F8F6; color: #2D2D2D; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
         
-        /* Custom Colors based on the mockup */
-        .bg-forest { background-color: #2E5A27; }
-        .text-forest { color: #2E5A27; }
-        .bg-light-green { background-color: #E8F0E4; }
-        .bg-cream { background-color: #FDFBF7; }
+        /* Glassmorphism Search Bar */
+        .glass-search { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); }
         
-        /* Hero Background Overlay */
-        .hero-overlay { background: linear-gradient(to right, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%); }
+        /* Premium Card Hover */
+        .property-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .property-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(26, 58, 50, 0.15); }
         
-        /* Search Bar Styling */
-        .search-pill { background-color: #DCE6D5; }
+        /* Hero Parallax */
+        .hero-bg { background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; }
         
-        /* Smooth Card Hover */
-        .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F9F8F6; }
+        ::-webkit-scrollbar-thumb { background: #1A3A32; border-radius: 4px; }
+        
+        /* Button Shine Effect */
+        .btn-shine { position: relative; overflow: hidden; }
+        .btn-shine::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: all 0.6s ease; }
+        .btn-shine:hover::before { left: 100%; }
+        
+        /* FAQ Accordion */
+        details[open] summary ~ * { animation: sweep .5s ease-in-out; }
+        @keyframes sweep { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- NAVBAR -->
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 px-6 md:px-12 flex justify-between items-center transition-all duration-300">
-        <div class="text-2xl font-bold text-forest tracking-tight">Poulls</div>
+    <!-- 1. NAVBAR PREMIUM -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-500 py-6 px-6 md:px-12 flex justify-between items-center text-white">
+        <div class="text-3xl font-bold font-playfair tracking-tight">Poulls<span class="text-terracotta">.</span></div>
         
-        <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-600">
-            <a href="#" class="hover:text-forest transition">Home</a>
-            <a href="#" class="hover:text-forest transition">Find</a>
-            <a href="#" class="hover:text-forest transition">Real Estate</a>
-            <a href="#" class="hover:text-forest transition">Contact</a>
+        <div class="hidden lg:flex space-x-10 text-sm font-medium tracking-wide">
+            <a href="#home" class="hover:text-terracotta transition">Home</a>
+            <a href="#properties" class="hover:text-terracotta transition">Properties</a>
+            <a href="#about" class="hover:text-terracotta transition">About Us</a>
+            <a href="#testimonials" class="hover:text-terracotta transition">Testimonials</a>
+            <a href="#faq" class="hover:text-terracotta transition">FAQ</a>
         </div>
         
-        <div class="flex items-center space-x-4">
-            <button class="text-gray-600 hover:text-forest transition"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition shadow-lg shadow-green-900/20">Contact</button>
+        <div class="hidden lg:flex items-center space-x-6">
+            <button class="text-sm font-medium hover:text-terracotta transition"><i class="fa-solid fa-magnifying-glass mr-2"></i>Search</button>
+            <button class="btn-shine bg-terracotta text-white px-8 py-3 rounded-full text-sm font-semibold hover:bg-opacity-90 transition shadow-lg shadow-terracotta/30">Contact Agent</button>
         </div>
+        
+        <button class="lg:hidden text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')"><i class="fa-solid fa-bars"></i></button>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section class="relative h-[85vh] flex items-center pt-20">
-        <!-- Background Image (Ganti dengan gambar asli Anda) -->
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2565&auto=format&fit=crop" alt="Eco Friendly Home" class="w-full h-full object-cover">
-            <div class="absolute inset-0 hero-overlay"></div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden fixed top-20 left-0 w-full bg-white z-40 p-8 flex flex-col space-y-6 shadow-2xl lg:hidden">
+        <a href="#home" class="text-charcoal font-medium hover:text-forest">Home</a>
+        <a href="#properties" class="text-charcoal font-medium hover:text-forest">Properties</a>
+        <a href="#about" class="text-charcoal font-medium hover:text-forest">About Us</a>
+        <a href="#testimonials" class="text-charcoal font-medium hover:text-forest">Testimonials</a>
+        <a href="#faq" class="text-charcoal font-medium hover:text-forest">FAQ</a>
+        <button class="bg-forest text-white px-6 py-3 rounded-full text-sm font-semibold w-full mt-4">Contact Agent</button>
+    </div>
+
+    <!-- 2. HERO SECTION -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Parallax -->
+        <div class="absolute inset-0 z-0 hero-bg" style="background-image: url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2565&auto=format&fit=crop');">
+            <div class="absolute inset-0 bg-gradient-to-r from-forest/90 via-forest/60 to-transparent"></div>
         </div>
         
-        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full">
-            <div class="max-w-2xl text-white">
-                <div class="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-1.5 mb-6">
-                    <i class="fa-solid fa-leaf text-green-400"></i>
-                    <span class="text-sm font-medium">Eco-Friendly Living</span>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full pt-20">
+            <div class="max-w-2xl text-white" data-aos="fade-right" data-aos-duration="1200">
+                <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2 mb-8">
+                    <i class="fa-solid fa-leaf text-terracotta"></i>
+                    <span class="text-sm font-medium tracking-wider uppercase">Eco-Friendly Living</span>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6">Find Eco-Friendly <br> Homes Easily</h1>
-                <p class="text-lg text-gray-200 mb-8 max-w-lg">Temukan hunian impian yang ramah lingkungan dan selaras dengan alam. Kami membantu Anda menemukan rumah yang tepat untuk gaya hidup berkelanjutan.</p>
-                <button class="bg-white text-forest px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition shadow-lg flex items-center gap-2">
-                    Get Started <i class="fa-solid fa-arrow-right text-sm"></i>
+                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1] mb-6">Find Your <br> <span class="text-terracotta">Dream Eco-Home</span></h1>
+                <p class="text-lg text-gray-200 mb-10 max-w-lg leading-relaxed font-light">Temukan hunian mewah yang ramah lingkungan. Kami menghubungkan Anda dengan properti eksklusif yang dirancang untuk keberlanjutan dan kenyamanan maksimal.</p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn-shine bg-terracotta text-white px-8 py-4 rounded-full font-semibold hover:bg-opacity-90 transition shadow-xl shadow-terracotta/30 flex items-center gap-3">
+                        Explore Properties <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition flex items-center gap-3">
+                        <i class="fa-solid fa-play text-terracotta"></i> Watch Video
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 text-white animate-bounce hidden md:block">
+            <i class="fa-solid fa-chevron-down text-2xl opacity-50"></i>
+        </div>
+    </section>
+
+    <!-- 3. FLOATING SEARCH BAR -->
+    <div class="relative z-20 max-w-5xl mx-auto px-6 -mt-16" data-aos="fade-up" data-aos-delay="300">
+        <div class="glass-search rounded-3xl p-4 md:p-6 shadow-2xl shadow-forest/10 flex flex-col md:flex-row items-center gap-4">
+            <div class="flex-1 w-full px-6 py-3 border-b md:border-b-0 md:border-r border-gray-200">
+                <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Location</label>
+                <div class="flex items-center">
+                    <i class="fa-solid fa-location-dot text-terracotta mr-3"></i>
+                    <input type="text" placeholder="City, ZIP, or Neighborhood" class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal placeholder-gray-400">
+                </div>
+            </div>
+            <div class="flex-1 w-full px-6 py-3 border-b md:border-b-0 md:border-r border-gray-200">
+                <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Property Type</label>
+                <div class="flex items-center">
+                    <i class="fa-solid fa-house text-terracotta mr-3"></i>
+                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer">
+                        <option>All Types</option>
+                        <option>Villa</option>
+                        <option>Cabin</option>
+                        <option>Apartment</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex-1 w-full px-6 py-3">
+                <label class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1 block">Price Range</label>
+                <div class="flex items-center">
+                    <i class="fa-solid fa-tag text-terracotta mr-3"></i>
+                    <select class="bg-transparent border-none outline-none w-full text-sm font-medium text-charcoal cursor-pointer">
+                        <option>Any Price</option>
+                        <option>$100k - $300k</option>
+                        <option>$300k - $500k</option>
+                        <option>$500k+</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn-shine bg-forest text-white w-full md:w-auto px-10 py-4 rounded-2xl font-semibold hover:bg-opacity-90 transition shadow-lg flex items-center justify-center gap-2">
+                <i class="fa-solid fa-magnifying-glass"></i> Search
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. TRUSTED BY / PARTNERS -->
+    <section class="py-16 px-6 max-w-7xl mx-auto">
+        <p class="text-center text-sm text-gray-400 uppercase tracking-widest mb-8" data-aos="fade-up">Trusted by leading eco-certifications</p>
+        <div class="flex flex-wrap justify-center items-center gap-12 opacity-50 grayscale hover:grayscale-0 transition duration-500" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-2xl font-bold font-playfair text-forest">LEED</div>
+            <div class="text-2xl font-bold font-playfair text-forest">EnergyStar</div>
+            <div class="text-2xl font-bold font-playfair text-forest">GreenBuild</div>
+            <div class="text-2xl font-bold font-playfair text-forest">EcoCert</div>
+            <div class="text-2xl font-bold font-playfair text-forest">BREEAM</div>
+        </div>
+    </section>
+
+    <!-- 5. WELCOME / ABOUT SECTION -->
+    <section id="about" class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row items-center gap-20">
+            <!-- Left Images -->
+            <div class="lg:w-1/2 relative" data-aos="fade-right" data-aos-duration="1000">
+                <div class="rounded-[2rem] overflow-hidden shadow-2xl relative z-10">
+                    <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2670&auto=format&fit=crop" alt="Wooden Eco House" class="w-full h-[500px] object-cover">
+                </div>
+                <!-- Secondary Image Overlay -->
+                <div class="absolute -bottom-10 -right-10 w-48 h-48 rounded-2xl overflow-hidden shadow-xl border-4 border-cream z-20 hidden md:block">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2670&auto=format&fit=crop" alt="Interior" class="w-full h-full object-cover">
+                </div>
+                <!-- Floating Badge -->
+                <div class="absolute -top-6 -left-6 bg-forest text-white rounded-full w-28 h-28 flex flex-col items-center justify-center shadow-2xl border-4 border-cream z-20">
+                    <i class="fa-solid fa-house-chimney text-3xl mb-1 text-terracotta"></i>
+                    <span class="text-xs font-bold text-center leading-tight">Find<br>Homes</span>
+                </div>
+            </div>
+            
+            <!-- Right Content -->
+            <div class="lg:w-1/2 space-y-8" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <div class="inline-flex items-center space-x-2 bg-forest/5 rounded-full px-4 py-1.5">
+                    <i class="fa-solid fa-seedling text-forest"></i>
+                    <span class="text-xs font-semibold text-forest uppercase tracking-wider">About Poulls</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-charcoal leading-tight">Building a <span class="text-forest">Sustainable</span> Future, One Home at a Time.</h2>
+                <p class="text-gray-600 leading-relaxed">Kami percaya bahwa rumah bukan sekadar tempat tinggal, melainkan ruang untuk hidup yang lebih baik. Poulls menghubungkan Anda dengan properti ramah lingkungan yang dirancang untuk kenyamanan dan keberlanjutan.</p>
+                <p class="text-gray-600 leading-relaxed">Dari desain arsitektur hijau hingga lokasi yang asri, kami memastikan setiap properti memenuhi standar kualitas dan etika lingkungan tertinggi.</p>
+                
+                <div class="grid grid-cols-2 gap-6 pt-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center text-forest flex-shrink-0">
+                            <i class="fa-solid fa-leaf text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-charcoal">Eco-Materials</h4>
+                            <p class="text-sm text-gray-500">Material bangunan berkelanjutan.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-forest/10 flex items-center justify-center text-forest flex-shrink-0">
+                            <i class="fa-solid fa-solar-panel text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-charcoal">Energy Efficient</h4>
+                            <p class="text-sm text-gray-500">Hemat energi & biaya operasional.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pt-6">
+                    <button class="btn-shine bg-forest text-white px-10 py-4 rounded-full font-semibold hover:bg-opacity-90 transition shadow-lg flex items-center gap-3">
+                        Learn More About Us <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. PROPERTIES SECTION (Dengan Filter) -->
+    <section id="properties" class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold text-charcoal mb-4">Featured <span class="text-forest">Properties</span></h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Jelajahi koleksi properti eksklusif kami yang dirancang untuk gaya hidup berkelanjutan.</p>
+            </div>
+            
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12" data-aos="fade-up" data-aos-delay="100">
+                <button class="filter-btn active bg-forest text-white px-6 py-2 rounded-full text-sm font-medium transition" data-filter="all">All Properties</button>
+                <button class="filter-btn bg-gray-100 text-gray-600 hover:bg-gray-200 px-6 py-2 rounded-full text-sm font-medium transition" data-filter="villa">Villas</button>
+                <button class="filter-btn bg-gray-100 text-gray-600 hover:bg-gray-200 px-6 py-2 rounded-full text-sm font-medium transition" data-filter="cabin">Cabins</button>
+                <button class="filter-btn bg-gray-100 text-gray-600 hover:bg-gray-200 px-6 py-2 rounded-full text-sm font-medium transition" data-filter="apartment">Apartments</button>
+            </div>
+            
+            <!-- Property Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Property Card 1 -->
+                <div class="property-card bg-cream rounded-3xl overflow-hidden shadow-lg group" data-category="villa" data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2670&auto=format&fit=crop" alt="Luxury Villa" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-terracotta text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">For Sale</div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition shadow-lg">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-charcoal mb-1">The Forest Villa</h3>
+                                <p class="text-sm text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-terracotta"></i> Bali, Indonesia</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-forest">$450k</div>
+                                <div class="text-xs text-gray-400">Est. $2,100/mo</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm text-gray-600 border-t border-gray-200 pt-4">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bed text-forest"></i> 4 Beds</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bath text-forest"></i> 3 Baths</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-vector-square text-forest"></i> 3,200 sqft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 2 -->
+                <div class="property-card bg-cream rounded-3xl overflow-hidden shadow-lg group" data-category="cabin" data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2675&auto=format&fit=crop" alt="Mountain Cabin" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-forest text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">For Rent</div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition shadow-lg">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-charcoal mb-1">Alpine Eco Cabin</h3>
+                                <p class="text-sm text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-terracotta"></i> Aspen, Colorado</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-forest">$3,500</div>
+                                <div class="text-xs text-gray-400">/month</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm text-gray-600 border-t border-gray-200 pt-4">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bed text-forest"></i> 3 Beds</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bath text-forest"></i> 2 Baths</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-vector-square text-forest"></i> 1,800 sqft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 3 -->
+                <div class="property-card bg-cream rounded-3xl overflow-hidden shadow-lg group" data-category="apartment" data-aos="fade-up" data-aos-delay="300">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2653&auto=format&fit=crop" alt="Modern Apartment" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute top-4 left-4 bg-terracotta text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider">For Sale</div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition shadow-lg">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-charcoal mb-1">Urban Green Loft</h3>
+                                <p class="text-sm text-gray-500 flex items-center gap-1"><i class="fa-solid fa-location-dot text-terracotta"></i> Singapore</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-2xl font-bold text-forest">$280k</div>
+                                <div class="text-xs text-gray-400">Est. $1,400/mo</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6 text-sm text-gray-600 border-t border-gray-200 pt-4">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bed text-forest"></i> 2 Beds</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bath text-forest"></i> 2 Baths</span>
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-vector-square text-forest"></i> 1,200 sqft</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16" data-aos="fade-up">
+                <button class="border-2 border-forest text-forest px-10 py-4 rounded-full font-semibold hover:bg-forest hover:text-white transition duration-300 flex items-center gap-3 mx-auto">
+                    View All Properties <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
     </section>
 
-    <!-- FLOATING SEARCH BAR -->
-    <div class="relative z-20 max-w-4xl mx-auto px-6 -mt-10">
-        <div class="search-pill rounded-full p-2 flex flex-col md:flex-row items-center shadow-xl shadow-green-900/10 border border-green-200/50">
-            <div class="flex-1 w-full md:w-auto px-6 py-3 border-b md:border-b-0 md:border-r border-green-300/50">
-                <p class="text-xs text-gray-500 font-semibold mb-1">Location</p>
-                <input type="text" placeholder="Enter city or ZIP" class="bg-transparent border-none outline-none w-full text-sm font-medium text-gray-800 placeholder-gray-400">
-            </div>
-            <div class="flex-1 w-full md:w-auto px-6 py-3">
-                <p class="text-xs text-gray-500 font-semibold mb-1">Property Type</p>
-                <input type="text" placeholder="House, Villa, etc." class="bg-transparent border-none outline-none w-full text-sm font-medium text-gray-800 placeholder-gray-400">
-            </div>
-            <div class="flex items-center space-x-2 px-4 py-2">
-                <button class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-forest transition"><i class="fa-solid fa-user"></i></button>
-                <button class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-gray-600 hover:text-forest transition"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="bg-forest text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition">Search</button>
-            </div>
+    <!-- 7. STATS SECTION -->
+    <section class="py-20 bg-forest text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2574&auto=format&fit=crop" alt="Leaf Pattern" class="w-full h-full object-cover">
         </div>
-    </div>
-
-    <!-- WELCOME SECTION -->
-    <section class="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-        <div class="flex flex-col lg:flex-row items-center gap-16">
-            <!-- Left Image -->
-            <div class="lg:w-1/2 relative">
-                <div class="rounded-3xl overflow-hidden shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=2670&auto=format&fit=crop" alt="Wooden House" class="w-full h-[400px] object-cover">
-                </div>
-                <!-- Floating Badge -->
-                <div class="absolute -top-6 -left-6 bg-forest text-white rounded-full w-24 h-24 flex flex-col items-center justify-center shadow-xl border-4 border-cream z-10">
-                    <i class="fa-solid fa-house-chimney text-2xl mb-1"></i>
-                    <span class="text-xs font-bold text-center leading-tight">Find<br>Homes</span>
-                </div>
-                <!-- Decorative Leaf -->
-                <div class="absolute -bottom-6 -right-6 bg-orange-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg border-4 border-cream z-10">
-                    <i class="fa-solid fa-leaf text-xl"></i>
-                </div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div data-aos="zoom-in" data-aos-delay="100">
+                <div class="text-5xl font-playfair font-bold mb-2 text-terracotta">500+</div>
+                <div class="text-sm uppercase tracking-widest text-gray-300">Eco Homes Sold</div>
             </div>
-            
-            <!-- Right Content -->
-            <div class="lg:w-1/2 space-y-6">
-                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">Welcome to <span class="text-forest">Poulls?</span></h2>
-                <p class="text-gray-600 leading-relaxed">Kami percaya bahwa rumah bukan sekadar tempat tinggal, melainkan ruang untuk hidup yang lebih baik. Poulls menghubungkan Anda dengan properti ramah lingkungan yang dirancang untuk kenyamanan dan keberlanjutan.</p>
-                <p class="text-gray-600 leading-relaxed">Dari desain arsitektur hijau hingga lokasi yang asri, kami memastikan setiap properti memenuhi standar kualitas dan etika lingkungan.</p>
-                
-                <div class="flex items-center gap-6 pt-4">
-                    <button class="bg-forest text-white px-8 py-3 rounded-full font-semibold hover:bg-green-800 transition shadow-lg shadow-green-900/20 flex items-center gap-2">
-                        <i class="fa-solid fa-play text-xs"></i> Learn More
-                    </button>
-                    <a href="#" class="text-gray-600 font-medium hover:text-forest transition flex items-center gap-2">
-                        View All Properties <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
+            <div data-aos="zoom-in" data-aos-delay="200">
+                <div class="text-5xl font-playfair font-bold mb-2 text-terracotta">98%</div>
+                <div class="text-sm uppercase tracking-widest text-gray-300">Client Satisfaction</div>
+            </div>
+            <div data-aos="zoom-in" data-aos-delay="300">
+                <div class="text-5xl font-playfair font-bold mb-2 text-terracotta">15+</div>
+                <div class="text-sm uppercase tracking-widest text-gray-300">Years Experience</div>
+            </div>
+            <div data-aos="zoom-in" data-aos-delay="400">
+                <div class="text-5xl font-playfair font-bold mb-2 text-terracotta">50+</div>
+                <div class="text-sm uppercase tracking-widest text-gray-300">Awards Won</div>
             </div>
         </div>
     </section>
 
-    <!-- FEATURES / CARDS SECTION -->
-    <section class="py-24 px-6 md:px-12 bg-light-green">
+    <!-- 8. TESTIMONIALS SECTION -->
+    <section id="testimonials" class="py-24 px-6 md:px-12 bg-cream">
         <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">10 Eco-Friendly Living Tips?</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Temukan inspirasi dan panduan untuk memulai gaya hidup berkelanjutan di rumah Anda.</p>
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold text-charcoal mb-4">What Our <span class="text-forest">Clients Say</span></h2>
+                <p class="text-gray-500 max-w-2xl mx-auto">Cerita nyata dari mereka yang telah menemukan rumah impian mereka bersama Poulls.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2670&auto=format&fit=crop" alt="Eco Home" class="w-full h-56 object-cover">
-                    <div class="p-8 text-center">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Well Eco-Friendly Homes</h3>
-                        <p class="text-gray-500 text-sm mb-6">Rumah yang dirancang dengan material berkelanjutan dan efisiensi energi maksimal.</p>
-                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex text-terracotta mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed">"Prosesnya sangat profesional. Tim Poulls membantu kami menemukan villa ramah lingkungan yang persis seperti impian kami. Sangat direkomendasikan!"</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2564&auto=format&fit=crop" alt="Client" class="w-14 h-14 rounded-full object-cover border-2 border-forest">
+                        <div>
+                            <div class="font-bold text-charcoal">Budi Santoso</div>
+                            <div class="text-sm text-gray-500">Homeowner, Bali</div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Card 2 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2675&auto=format&fit=crop" alt="Sustainable Home" class="w-full h-56 object-cover">
-                    <div class="p-8 text-center">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Sustainably Living Homes</h3>
-                        <p class="text-gray-500 text-sm mb-6">Hunian yang mengutamakan daur ulang, penghematan air, dan ruang terbuka hijau.</p>
-                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex text-terracotta mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed">"Saya sangat menghargai komitmen mereka terhadap keberlanjutan. Setiap properti yang ditawarkan benar-benar mempertimbangkan dampak lingkungan."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2574&auto=format&fit=crop" alt="Client" class="w-14 h-14 rounded-full object-cover border-2 border-forest">
+                        <div>
+                            <div class="font-bold text-charcoal">Sarah Wijaya</div>
+                            <div class="text-sm text-gray-500">Investor, Jakarta</div>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- Card 3 -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-lg card-hover">
-                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2653&auto=format&fit=crop" alt="Comfortable Home" class="w-full h-56 object-cover">
-                    <div class="p-8 text-center">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Comfortable Living</h3>
-                        <p class="text-gray-500 text-sm mb-6">Kenyamanan modern yang dipadukan dengan ketenangan alam sekitarnya.</p>
-                        <button class="bg-forest text-white px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-green-800 transition w-full">Learn More</button>
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-8 rounded-3xl shadow-lg" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex text-terracotta mb-4">
+                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                    </div>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed">"Layanan after-sales mereka luar biasa. Mereka membantu kami dengan semua dokumentasi dan bahkan memberikan tips untuk menjaga rumah tetap ramah lingkungan."</p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2574&auto=format&fit=crop" alt="Client" class="w-14 h-14 rounded-full object-cover border-2 border-forest">
+                        <div>
+                            <div class="font-bold text-charcoal">Michael Chen</div>
+                            <div class="text-sm text-gray-500">Architect, Singapore</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Pagination Dots -->
-            <div class="flex justify-center items-center space-x-2 mt-12">
-                <div class="w-3 h-3 rounded-full bg-forest"></div>
-                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
-                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
-                <div class="w-3 h-3 rounded-full bg-gray-300 hover:bg-forest transition cursor-pointer"></div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER SEDERHANA -->
-    <footer class="bg-white py-8 text-center border-t border-gray-100">
-        <p class="text-gray-500 text-sm">&copy; 2024 Poulls Eco-Friendly Homes. All rights reserved.</p>
+    <!-- 9. FAQ SECTION -->
+    <section id="faq" class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold text-charcoal mb-4">Frequently Asked <span class="text-forest">Questions</span></h2>
+                <p class="text-gray-500">Pertanyaan yang sering diajukan oleh calon pembeli dan penyewa.</p>
+            </div>
+            
+            <div class="space-y-4" data-aos="fade-up" data-aos-delay="100">
+                <details class="bg-cream rounded-2xl p-6 group cursor-pointer border border-gray-100">
+                    <summary class="flex justify-between items-center font-semibold text-lg text-charcoal list-none">
+                        Apa itu properti "Eco-Friendly"?
+                        <span class="text-forest group-open:rotate-180 transition-transform duration-300"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-4 text-sm leading-relaxed">Properti ramah lingkungan adalah hunian yang dirancang untuk meminimalkan dampak negatif terhadap lingkungan. Ini mencakup penggunaan material berkelanjutan, efisiensi energi yang tinggi, penghematan air, dan lokasi yang mendukung keanekaragaman hayati.</p>
+                </details>
+                
+                <details class="bg-cream rounded-2xl p-6 group cursor-pointer border border-gray-100">
+                    <summary class="flex justify-between items-center font-semibold text-lg text-charcoal list-none">
+                        Apakah harga properti di Poulls lebih mahal?
+                        <span class="text-forest group-open:rotate-180 transition-transform duration-300"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-4 text-sm leading-relaxed">Meskipun biaya awal mungkin sedikit lebih tinggi karena teknologi dan material khusus, properti ramah lingkungan menawarkan penghematan jangka panjang yang signifikan melalui tagihan energi dan air yang lebih rendah, serta nilai jual kembali yang lebih tinggi.</p>
+                </details>
+                
+                <details class="bg-cream rounded-2xl p-6 group cursor-pointer border border-gray-100">
+                    <summary class="flex justify-between items-center font-semibold text-lg text-charcoal list-none">
+                        Bagaimana proses pembelian properti di Poulls?
+                        <span class="text-forest group-open:rotate-180 transition-transform duration-300"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="text-gray-600 mt-4 text-sm leading-relaxed">Prosesnya sederhana: 1) Konsultasi kebutuhan Anda, 2) Kami kurasi properti yang sesuai, 3) Jadwalkan tur virtual atau kunjungan langsung, 4) Bantu proses negosiasi dan legal, 5) Serah terima kunci.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CTA SECTION -->
+    <section class="py-24 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-forest z-0">
+            <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2574&auto=format&fit=crop" alt="Nature" class="w-full h-full object-cover opacity-20 mix-blend-overlay">
+        </div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center" data-aos="zoom-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-white mb-6 font-playfair">Ready to Find Your <br> Dream Eco-Home?</h2>
+            <p class="text-gray-200 mb-10 max-w-xl mx-auto text-lg">Jangan lewatkan kesempatan untuk hidup lebih sehat dan berkelanjutan. Konsultasikan kebutuhan Anda dengan agen ahli kami sekarang.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button class="btn-shine bg-terracotta text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:bg-opacity-90 transition">
+                    Konsultasi Gratis
+                </button>
+                <button class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white/20 transition">
+                    Lihat Katalog
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. FOOTER -->
+    <footer class="bg-charcoal text-white pt-20 pb-10 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div>
+                <div class="text-3xl font-bold font-playfair mb-6">Poulls<span class="text-terracotta">.</span></div>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">Membangun masa depan yang lebih hijau dengan menghubungkan Anda ke properti impian yang ramah lingkungan.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-terracotta transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-terracotta transition"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-terracotta transition"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-terracotta transition"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-lg mb-6 font-playfair">Quick Links</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li><a href="#home" class="hover:text-terracotta transition">Home</a></li>
+                    <li><a href="#properties" class="hover:text-terracotta transition">Properties</a></li>
+                    <li><a href="#about" class="hover:text-terracotta transition">About Us</a></li>
+                    <li><a href="#testimonials" class="hover:text-terracotta transition">Testimonials</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-lg mb-6 font-playfair">Services</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li><a href="#" class="hover:text-terracotta transition">Buy Property</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition">Sell Property</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition">Property Management</a></li>
+                    <li><a href="#" class="hover:text-terracotta transition">Consultation</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 class="font-bold text-lg mb-6 font-playfair">Newsletter</h4>
+                <p class="text-gray-400 text-sm mb-4">Dapatkan update properti terbaru langsung di inbox Anda.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Email Anda" class="bg-white/10 border border-white/20 rounded-l-lg px-4 py-3 text-sm w-full focus:outline-none focus:border-terracotta text-white">
+                    <button class="bg-terracotta text-white px-4 py-3 rounded-r-lg text-sm font-semibold hover:bg-opacity-90 transition"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 max-w-7xl mx-auto">
+            <p>&copy; 2024 Poulls Eco-Friendly Real Estate. All rights reserved.</p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a href="#" class="hover:text-white transition">Sitemap</a>
+            </div>
+        </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Inisialisasi AOS
+        AOS.init({ once: true, offset: 100, duration: 800 });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white', 'text-charcoal', 'shadow-lg', 'py-4');
+                nav.classList.remove('text-white', 'py-6');
+            } else {
+                nav.classList.remove('bg-white', 'text-charcoal', 'shadow-lg', 'py-4');
+                nav.classList.add('text-white', 'py-6');
+            }
+        });
+
+        // Property Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const propertyCards = document.querySelectorAll('.property-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button style
+                filterBtns.forEach(b => {
+                    b.classList.remove('bg-forest', 'text-white');
+                    b.classList.add('bg-gray-100', 'text-gray-600');
+                });
+                btn.classList.remove('bg-gray-100', 'text-gray-600');
+                btn.classList.add('bg-forest', 'text-white');
+
+                // Filter cards
+                const filterValue = btn.getAttribute('data-filter');
+                propertyCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                        setTimeout(() => card.style.opacity = '1', 50);
+                    } else {
+                        card.style.opacity = '0';
+                        setTimeout(() => card.style.display = 'none', 300);
+                    }
+                });
+            });
+        });
+
+        // Favorite Heart Toggle
+        document.querySelectorAll('.property-card button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-regular')) {
+                    icon.classList.remove('fa-regular');
+                    icon.classList.add('fa-solid', 'text-red-500');
+                } else {
+                    icon.classList.remove('fa-solid', 'text-red-500');
+                    icon.classList.add('fa-regular');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
